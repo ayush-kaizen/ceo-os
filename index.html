@@ -1116,7 +1116,7 @@ body {
     <div class="topbar-backend">
       <label>Backend</label>
       <div class="topbar-status" id="backendStatus"></div>
-      <input type="text" id="backendUrl" value="https://web-production-31001.up.railway.app" placeholder="https://your-backend.up.railway.app" onchange="checkBackend()">
+      <input type="text" id="backendUrl" value="http://localhost:8000" placeholder="https://your-backend.up.railway.app" onchange="checkBackend()">
     </div>
     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
       <i data-lucide="sun-moon"></i>
@@ -1175,6 +1175,9 @@ body {
           </button>
           <button class="btn btn-primary" id="runBtn" onclick="runAnalysis()">
             <i data-lucide="play"></i> Run Executive Analysis
+          </button>
+          <button class="btn btn-secondary" onclick="loadInstantDemo()" style="border-color:var(--gold);color:var(--gold)">
+            <i data-lucide="zap"></i> Instant Demo (Cached)
           </button>
         </div>
       </div>
@@ -1351,6 +1354,56 @@ STRATEGIC CONTEXT
 - Consumer confidence index at 92 (below 100 = contractionary)
 - EU logistics costs projected to rise further 5-8% in 2026
 - Board has approved €50M restructuring provision for FY26`;
+}
+
+/* ========================================================================
+   INSTANT DEMO — loads cached results, no API calls
+   ======================================================================== */
+async function loadInstantDemo() {
+  hideError('analyzeError');
+
+  // First load the demo case inputs
+  await loadDemoCase();
+
+  const stageOrder = ['plan', 'retrieve', 'cfo', 'coo', 'strategy', 'memo'];
+  const output = document.getElementById('stagesOutput');
+  output.innerHTML = '';
+
+  // Build all panels in loading state
+  stageOrder.forEach(key => {
+    const meta = STAGE_META[key];
+    const isMemo = key === 'memo';
+    output.innerHTML += `
+      <div class="stage-panel ${isMemo ? 'memo-panel' : ''}" id="panel-${key}">
+        <div class="stage-header" onclick="togglePanel('${key}')">
+          <div class="stage-number pending" id="num-${key}">${meta.num}</div>
+          <span class="stage-title">${meta.title}</span>
+          <span class="stage-status" id="status-${key}">LOADING</span>
+          <i data-lucide="chevron-down" class="stage-chevron" style="width:16px;height:16px"></i>
+        </div>
+        <div class="stage-body" id="body-${key}">
+          <div class="shimmer"></div><div class="shimmer"></div><div class="shimmer"></div>
+        </div>
+      </div>`;
+  });
+  lucide.createIcons();
+
+  try {
+    const res = await fetch(getBackendUrl() + '/api/demo-fallback');
+    if (!res.ok) throw new Error('No cached demo available. Run the demo once with the API first.');
+    const data = await res.json();
+
+    // Animate each stage appearing with a delay for visual effect
+    for (let i = 0; i < stageOrder.length; i++) {
+      const key = stageOrder[i];
+      await new Promise(r => setTimeout(r, 400)); // 400ms delay between stages
+      if (data[key]) {
+        handleStageComplete(key, data[key], stageOrder);
+      }
+    }
+  } catch (err) {
+    showError('analyzeError', err.message);
+  }
 }
 
 /* ========================================================================

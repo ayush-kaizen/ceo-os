@@ -120,6 +120,15 @@ async def get_demo_case():
     }
 
 
+@app.get("/api/demo-fallback")
+async def get_demo_fallback():
+    """Serve the cached demo results instantly — no API calls."""
+    fallback = load_fallback()
+    if fallback:
+        return fallback
+    raise HTTPException(status_code=404, detail="No cached demo results available. Run the demo case once successfully first.")
+
+
 @app.post("/api/analyze")
 async def analyze(request: AnalyzeRequest):
     """
