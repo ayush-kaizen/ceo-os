@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEO OS — Executive Decision Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+<style>
+/* ========================================================================
+   CSS VARIABLES & THEME
+   ======================================================================== */
+:root {
+  /* Spacing */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --sp-12: 48px; --sp-16: 64px;
+
+  /* Radius */
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px; --r-full: 999px;
+
+  /* Sidebar */
+  --sidebar-w: 260px;
+  --topbar-h: 56px;
+
+  /* Typography */
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', monospace;
+  --font-display: 'Instrument Serif', Georgia, serif;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-fast: 150ms var(--ease-out);
+  --t-med: 250ms var(--ease-out);
+  --t-slow: 400ms var(--ease-out);
+}
+
+/* DARK THEME */
+[data-theme="dark"] {
+  --bg-root: #08090b;
+  --bg-surface: #0e1017;
+  --bg-raised: #151821;
+  --bg-overlay: #1a1e2a;
+  --bg-input: #111420;
+  --bg-sidebar: #0b0c10;
+
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.1);
+  --border-strong: rgba(255,255,255,0.16);
+
+  --text-primary: #eef0f6;
+  --text-secondary: #8b90a0;
+  --text-tertiary: #5c6070;
+  --text-inverse: #08090b;
+
+  --accent: #6c8fff;
+  --accent-soft: rgba(108,143,255,0.12);
+  --accent-hover: #8aa6ff;
+  --success: #52d68a;
+  --success-soft: rgba(82,214,138,0.1);
+  --warning: #f5a623;
+  --warning-soft: rgba(245,166,35,0.1);
+  --error: #ff6b6b;
+  --error-soft: rgba(255,107,107,0.1);
+  --gold: #f0c060;
+  --gold-soft: rgba(240,192,96,0.1);
+
+  --shimmer-a: #151821;
+  --shimmer-b: #1e2230;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 40px rgba(108,143,255,0.08);
+}
+
+/* LIGHT THEME */
+[data-theme="light"] {
+  --bg-root: #f4f5f7;
+  --bg-surface: #ffffff;
+  --bg-raised: #ffffff;
+  --bg-overlay: #f0f1f4;
+  --bg-input: #f7f8fa;
+  --bg-sidebar: #fafbfc;
+
+  --border-subtle: rgba(0,0,0,0.05);
+  --border-default: rgba(0,0,0,0.1);
+  --border-strong: rgba(0,0,0,0.16);
+
+  --text-primary: #111318;
+  --text-secondary: #5c5f6e;
+  --text-tertiary: #9496a1;
+  --text-inverse: #ffffff;
+
+  --accent: #4a6fe5;
+  --accent-soft: rgba(74,111,229,0.08);
+  --accent-hover: #3b5ecc;
+  --success: #1a9d56;
+  --success-soft: rgba(26,157,86,0.08);
+  --warning: #c48318;
+  --warning-soft: rgba(196,131,24,0.08);
+  --error: #dc3545;
+  --error-soft: rgba(220,53,69,0.08);
+  --gold: #b8860b;
+  --gold-soft: rgba(184,134,11,0.08);
+
+  --shimmer-a: #eceef2;
+  --shimmer-b: #f7f8fa;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
+  --shadow-glow: 0 0 40px rgba(74,111,229,0.06);
+}
+
+/* ========================================================================
+   RESET & BASE
+   ======================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-root);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ========================================================================
+   LAYOUT SHELL
+   ======================================================================== */
+.app-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  grid-template-rows: var(--topbar-h) 1fr;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ========================================================================
+   SIDEBAR
+   ======================================================================== */
+.sidebar {
+  grid-row: 1 / -1;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-6) 0;
+  z-index: 20;
+}
+
+.sidebar-logo {
+  padding: 0 var(--sp-6) var(--sp-6);
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: var(--sp-4);
+}
+
+.sidebar-logo h1 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+.sidebar-logo h1 span { color: var(--accent); }
+
+.sidebar-logo p {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  margin-top: var(--sp-1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.sidebar-nav { flex: 1; padding: var(--sp-2) var(--sp-3); }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 450;
+  margin-bottom: var(--sp-1);
+  border: 1px solid transparent;
+  user-select: none;
+}
+.nav-item:hover {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+.nav-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--border-subtle);
+  font-weight: 600;
+}
+.nav-item i { width: 18px; height: 18px; flex-shrink: 0; }
+
+.sidebar-footer {
+  padding: var(--sp-4) var(--sp-6);
+  border-top: 1px solid var(--border-subtle);
+}
+.sidebar-footer p {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+.sidebar-footer a { color: var(--accent); text-decoration: none; }
+
+/* ========================================================================
+   TOP BAR
+   ======================================================================== */
+.topbar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-6);
+  gap: var(--sp-4);
+  z-index: 10;
+}
+
+.topbar-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.topbar-spacer { flex: 1; }
+
+.topbar-backend {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.topbar-backend label {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.topbar-backend input {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-sm);
+  color: var(--text-primary);
+  width: 280px;
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+.topbar-backend input:focus { border-color: var(--accent); }
+
+.topbar-status {
+  width: 8px; height: 8px;
+  border-radius: var(--r-full);
+  background: var(--text-tertiary);
+  flex-shrink: 0;
+  transition: background var(--t-med);
+}
+.topbar-status.connected { background: var(--success); }
+.topbar-status.error { background: var(--error); }
+
+.theme-toggle {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+.theme-toggle:hover { background: var(--accent-soft); color: var(--text-primary); }
+
+/* ========================================================================
+   MAIN CONTENT
+   ======================================================================== */
+.main-content {
+  overflow-y: auto;
+  padding: var(--sp-8);
+  scroll-behavior: smooth;
+}
+.main-content::-webkit-scrollbar { width: 6px; }
+.main-content::-webkit-scrollbar-track { background: transparent; }
+.main-content::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: var(--r-full); }
+
+.page { display: none; max-width: 1000px; margin: 0 auto; }
+.page.active { display: block; animation: fadeUp 0.35s var(--ease-out); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-header {
+  margin-bottom: var(--sp-8);
+}
+.page-header h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sp-2);
+}
+.page-header p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* ========================================================================
+   CARDS & INPUT PANELS
+   ======================================================================== */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--t-med);
+}
+
+.input-group { margin-bottom: var(--sp-5); }
+.input-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-2);
+}
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  resize: vertical;
+}
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Lens Toggles */
+.lens-grid {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+.lens-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-full);
+  border: 1px solid var(--border-default);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  user-select: none;
+}
+.lens-toggle:hover { border-color: var(--accent); color: var(--text-primary); }
+.lens-toggle.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.lens-toggle i { width: 15px; height: 15px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-md);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  border: 1px solid transparent;
+  user-select: none;
+}
+.btn i { width: 16px; height: 16px; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-default);
+}
+.btn-secondary:hover { background: var(--accent-soft); color: var(--text-primary); border-color: var(--accent); }
+
+.btn-row { display: flex; gap: var(--sp-3); margin-top: var(--sp-6); flex-wrap: wrap; }
+
+/* ========================================================================
+   STAGE PANELS (Mode 1 output)
+   ======================================================================== */
+.stages-output { margin-top: var(--sp-8); }
+
+.stage-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  margin-bottom: var(--sp-4);
+  overflow: hidden;
+  animation: fadeUp 0.4s var(--ease-out);
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--t-fast);
+}
+.stage-header:hover { background: var(--bg-overlay); }
+
+.stage-number {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.stage-number.pending { background: var(--bg-overlay); color: var(--text-tertiary); }
+.stage-number.running { background: var(--accent-soft); color: var(--accent); }
+.stage-number.done { background: var(--success-soft); color: var(--success); }
+.stage-number.error { background: var(--error-soft); color: var(--error); }
+
+.stage-title { font-weight: 600; font-size: 0.9rem; flex: 1; }
+.stage-status {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+.stage-status.running { color: var(--accent); }
+.stage-status.done { color: var(--success); }
+
+.stage-chevron {
+  color: var(--text-tertiary);
+  transition: transform var(--t-fast);
+}
+.stage-panel.expanded .stage-chevron { transform: rotate(180deg); }
+
+.stage-body {
+  padding: 0 var(--sp-5);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s var(--ease-out), padding 0.3s var(--ease-out);
+}
+.stage-panel.expanded .stage-body {
+  max-height: 5000px;
+  padding: var(--sp-5);
+}
+
+/* Shimmer loading */
+.shimmer {
+  height: 14px;
+  border-radius: var(--r-sm);
+  background: linear-gradient(90deg, var(--shimmer-a) 25%, var(--shimmer-b) 50%, var(--shimmer-a) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+  margin-bottom: var(--sp-3);
+}
+.shimmer:nth-child(2) { width: 85%; }
+.shimmer:nth-child(3) { width: 70%; }
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* CEO MEMO — visually prominent */
+.stage-panel.memo-panel {
+  border: 1px solid var(--accent);
+  box-shadow: var(--shadow-glow);
+  border-left: 4px solid var(--accent);
+}
+
+/* Stage content rendering helpers */
+.kv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0;
+}
+.kv-card {
+  background: var(--bg-overlay);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--border-subtle);
+}
+.kv-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  margin-bottom: var(--sp-1);
+}
+.kv-value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.kv-value.negative { color: var(--error); }
+.kv-value.positive { color: var(--success); }
+.kv-value.neutral { color: var(--warning); }
+.kv-trend {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.section-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin: var(--sp-5) 0 var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prose {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+.prose strong { color: var(--text-primary); font-weight: 600; }
+
+.rec-list { list-style: none; margin: var(--sp-3) 0; }
+.rec-item {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-overlay);
+  border-radius: var(--r-md);
+  margin-bottom: var(--sp-2);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  align-items: flex-start;
+}
+.rec-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  flex-shrink: 0;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+.rec-badge.must { background: var(--error-soft); color: var(--error); }
+.rec-badge.should { background: var(--warning-soft); color: var(--warning); }
+.rec-badge.explore { background: var(--accent-soft); color: var(--accent); }
+
+.risk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  margin: var(--sp-3) 0;
+}
+.risk-table th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--border-default);
+}
+.risk-table td {
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+.materiality {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: var(--r-full);
+  text-transform: uppercase;
+}
+.materiality.high { background: var(--error-soft); color: var(--error); }
+.materiality.medium { background: var(--warning-soft); color: var(--warning); }
+.materiality.low { background: var(--success-soft); color: var(--success); }
+
+/* Decision cards (CEO Memo) */
+.decision-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-4);
+  margin: var(--sp-4) 0;
+}
+.decision-card {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  position: relative;
+  overflow: hidden;
+}
+.decision-card::before {
+  content: attr(data-num);
+  position: absolute;
+  top: -8px; right: -4px;
+  font-family: var(--font-display);
+  font-size: 4rem;
+  color: var(--accent-soft);
+  font-weight: 400;
+  line-height: 1;
+  pointer-events: none;
+}
+.decision-card h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+  color: var(--text-primary);
+}
+.decision-card p { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6; }
+.decision-meta {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+.decision-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Timeline (90-day plan) */
+.timeline { margin: var(--sp-4) 0; position: relative; padding-left: var(--sp-8); }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--border-default);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.timeline-item:last-child { border-bottom: none; margin-bottom: 0; }
+.timeline-dot {
+  position: absolute;
+  left: calc(-1 * var(--sp-8) + 6px);
+  top: 4px;
+  width: 14px; height: 14px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  border: 2px solid var(--bg-surface);
+}
+.timeline-week {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-1);
+}
+.timeline-action { font-size: 0.88rem; color: var(--text-primary); line-height: 1.5; }
+.timeline-meta { font-size: 0.78rem; color: var(--text-tertiary); margin-top: var(--sp-1); }
+
+/* Trade-offs */
+.tradeoff-card {
+  background: var(--bg-overlay);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-3);
+  border-left: 3px solid var(--warning);
+}
+.tradeoff-tension {
+  font-size: 0.72rem;
+  color: var(--warning);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-2);
+}
+.tradeoff-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--sp-2); }
+.tradeoff-resolution { font-size: 0.84rem; color: var(--success); font-style: italic; }
+
+/* Quote block (investor narrative) */
+.quote-block {
+  border-left: 3px solid var(--gold);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--gold-soft);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin: var(--sp-4) 0;
+}
+
+/* Reasoning / Thinking block */
+.reasoning-block {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  margin-bottom: var(--sp-4);
+  overflow: hidden;
+}
+.reasoning-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+.reasoning-toggle:hover { background: var(--accent-soft); }
+.reasoning-toggle i { width: 14px; height: 14px; transition: transform var(--t-fast); }
+.reasoning-block.open .reasoning-toggle i { transform: rotate(180deg); }
+.reasoning-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s var(--ease-out);
+}
+.reasoning-block.open .reasoning-body { max-height: 2000px; }
+.reasoning-text {
+  padding: var(--sp-3) var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  line-height: 1.7;
+  color: var(--text-tertiary);
+  white-space: pre-wrap;
+  border-top: 1px solid var(--border-subtle);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Talking points */
+.talking-points { list-style: none; margin: var(--sp-3) 0; counter-reset: tp; }
+.talking-points li {
+  counter-increment: tp;
+  padding: var(--sp-2) 0 var(--sp-2) var(--sp-8);
+  position: relative;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.talking-points li::before {
+  content: counter(tp);
+  position: absolute;
+  left: 0; top: var(--sp-2);
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 700;
+  border-radius: var(--r-full);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ========================================================================
+   CONCEPT NAVIGATOR (Mode 2)
+   ======================================================================== */
+.concept-card { margin-top: var(--sp-6); }
+
+.concept-title-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+  flex-wrap: wrap;
+}
+.concept-title-bar h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+.domain-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.tag-pill {
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  background: var(--bg-overlay);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border-subtle);
+}
+
+.concept-section { margin-bottom: var(--sp-6); }
+.concept-section-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: var(--sp-3);
+}
+
+.mechanics-list {
+  list-style: none;
+  counter-reset: mech;
+}
+.mechanics-list li {
+  counter-increment: mech;
+  padding: var(--sp-2) 0 var(--sp-2) var(--sp-8);
+  position: relative;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.mechanics-list li::before {
+  content: counter(mech);
+  position: absolute; left: 0; top: var(--sp-2);
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-full);
+  background: var(--bg-overlay);
+  color: var(--text-tertiary);
+  font-size: 0.72rem; font-weight: 700;
+}
+
+.example-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--sp-3);
+}
+.example-card {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+}
+.example-card h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: var(--sp-1); }
+.example-card .year { font-size: 0.72rem; color: var(--text-tertiary); margin-bottom: var(--sp-2); }
+.example-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+.playbook-list { list-style: none; counter-reset: pb; }
+.playbook-list li {
+  counter-increment: pb;
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) calc(var(--sp-8) + var(--sp-2));
+  position: relative;
+  margin-bottom: var(--sp-2);
+  background: var(--bg-overlay);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-subtle);
+}
+.playbook-list li::before {
+  content: counter(pb);
+  position: absolute; left: var(--sp-3); top: var(--sp-3);
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-full);
+  background: var(--gold-soft);
+  color: var(--gold);
+  font-size: 0.72rem; font-weight: 700;
+}
+.playbook-list li strong { color: var(--text-primary); display: block; font-size: 0.88rem; margin-bottom: 2px; }
+.playbook-list li span { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+
+.sim-box {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+.sim-scenario { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--sp-4); }
+.sim-question {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--warning);
+  margin-bottom: var(--sp-3);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+.sim-answer {
+  display: none;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding: var(--sp-4);
+  background: var(--success-soft);
+  border-radius: var(--r-md);
+  margin-top: var(--sp-3);
+}
+.sim-answer.revealed { display: block; animation: fadeUp 0.3s var(--ease-out); }
+
+/* Concept graph nodes */
+.concept-nodes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--sp-3);
+}
+.concept-node {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+.concept-node:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.concept-node h5 {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.concept-node .relation {
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--sp-1);
+}
+.concept-node p {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.concept-node .parent-label {
+  font-size: 0.66rem;
+  color: var(--text-tertiary);
+  font-style: italic;
+  margin-bottom: 2px;
+}
+
+/* Depth selector */
+.depth-selector {
+  display: flex;
+  gap: var(--sp-1);
+  background: var(--bg-overlay);
+  border-radius: var(--r-full);
+  padding: 3px;
+  border: 1px solid var(--border-subtle);
+}
+.depth-btn {
+  padding: var(--sp-1) var(--sp-4);
+  border-radius: var(--r-full);
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all var(--t-fast);
+}
+.depth-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+.depth-btn:hover:not(.active) { color: var(--text-primary); }
+
+/* ========================================================================
+   EMPTY STATES & ERRORS
+   ======================================================================== */
+.empty-state {
+  text-align: center;
+  padding: var(--sp-16) var(--sp-8);
+  color: var(--text-tertiary);
+}
+.empty-state i { width: 48px; height: 48px; margin-bottom: var(--sp-4); opacity: 0.3; }
+.empty-state h3 { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: var(--sp-2); }
+.empty-state p { font-size: 0.88rem; max-width: 400px; margin: 0 auto; line-height: 1.6; }
+
+.error-banner {
+  background: var(--error-soft);
+  border: 1px solid var(--error);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: 0.84rem;
+  color: var(--error);
+  margin-bottom: var(--sp-4);
+  display: none;
+}
+.error-banner.visible { display: flex; align-items: center; gap: var(--sp-2); }
+
+/* ========================================================================
+   LOADING OVERLAY ON RUN
+   ======================================================================== */
+.running-indicator {
+  display: none;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: var(--sp-4);
+}
+.running-indicator.visible { display: flex; }
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--accent-soft);
+  border-top-color: var(--accent);
+  border-radius: var(--r-full);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ========================================================================
+   RESPONSIVE (basic — spec says not mobile-first)
+   ======================================================================== */
+@media (max-width: 900px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h1>CEO <span>OS</span></h1>
+      <p>Executive Intelligence</p>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" data-page="intelligence" onclick="switchPage('intelligence')">
+        <i data-lucide="brain-circuit"></i>
+        CEO Intelligence
+      </div>
+      <div class="nav-item" data-page="concepts" onclick="switchPage('concepts')">
+        <i data-lucide="network"></i>
+        Concept Navigator
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <p>Powered by <a href="https://z.ai" target="_blank">Z.ai GLM-5.1</a><br>Thinking Mode · Tool Calling · 200K Context</p>
+    </div>
+  </aside>
+
+  <!-- ====== TOP BAR ====== -->
+  <header class="topbar">
+    <span class="topbar-title">CEO OS</span>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-backend">
+      <label>Backend</label>
+      <div class="topbar-status" id="backendStatus"></div>
+      <input type="text" id="backendUrl" value="http://localhost:8000" placeholder="https://your-backend.up.railway.app" onchange="checkBackend()">
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+      <i data-lucide="sun-moon"></i>
+    </button>
+  </header>
+
+  <!-- ====== MAIN CONTENT ====== -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ===== PAGE 1: CEO INTELLIGENCE ===== -->
+    <div class="page active" id="page-intelligence">
+      <div class="page-header">
+        <h2>CEO Intelligence</h2>
+        <p>Analyse any business challenge with a six-stage agent workflow. Plan, gather evidence, run CFO, COO, and strategy analyses, then synthesise a board-ready CEO memo.</p>
+      </div>
+
+      <div class="card" id="intelligenceInput">
+        <div class="input-group">
+          <label>Company Name</label>
+          <input type="text" id="companyName" placeholder="e.g. EuroRetail AG">
+        </div>
+
+        <div class="input-group">
+          <label>Problem Statement</label>
+          <textarea id="problemStatement" rows="4" placeholder="e.g. Our EBITDA margins have compressed 320bps YoY due to logistics inflation. Investors are pressing for recovery within two quarters."></textarea>
+        </div>
+
+        <div class="input-group">
+          <label>Supporting Context <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-tertiary)">(optional — paste annual report excerpts, financials, internal data)</span></label>
+          <textarea id="contextInput" rows="6" placeholder="Paste revenue breakdowns, EBITDA data, supply chain metrics, or other supporting data..."></textarea>
+        </div>
+
+        <div class="input-group">
+          <label>Analyst Lenses</label>
+          <div class="lens-grid">
+            <button class="lens-toggle active" data-lens="cfo" onclick="toggleLens(this)">
+              <i data-lucide="landmark"></i> CFO
+            </button>
+            <button class="lens-toggle active" data-lens="coo" onclick="toggleLens(this)">
+              <i data-lucide="settings"></i> COO
+            </button>
+            <button class="lens-toggle active" data-lens="strategy" onclick="toggleLens(this)">
+              <i data-lucide="compass"></i> Strategy
+            </button>
+          </div>
+        </div>
+
+        <div class="error-banner" id="analyzeError">
+          <i data-lucide="alert-circle"></i>
+          <span id="analyzeErrorText"></span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="loadDemoCase()">
+            <i data-lucide="flask-conical"></i> Load Demo Case
+          </button>
+          <button class="btn btn-primary" id="runBtn" onclick="runAnalysis()">
+            <i data-lucide="play"></i> Run Executive Analysis
+          </button>
+        </div>
+      </div>
+
+      <div class="running-indicator" id="runningIndicator">
+        <div class="spinner"></div>
+        <span>Analysis in progress — stages stream as they complete...</span>
+      </div>
+
+      <div class="stages-output" id="stagesOutput"></div>
+    </div>
+
+    <!-- ===== PAGE 2: CONCEPT NAVIGATOR ===== -->
+    <div class="page" id="page-concepts">
+      <div class="page-header">
+        <h2>Concept Navigator</h2>
+        <p>Enter any business, finance, or strategy concept. Get a CEO-level knowledge card, real-world examples, an executive simulation, and a navigable graph of connected ideas.</p>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;gap:var(--sp-3);align-items:flex-end;flex-wrap:wrap">
+          <div class="input-group" style="flex:1;min-width:240px;margin-bottom:0">
+            <label>Concept</label>
+            <input type="text" id="conceptInput" placeholder="e.g. Working Capital, EBITDA, Jobs To Be Done, Throughput Rate" onkeydown="if(event.key==='Enter')navigateConcept()">
+          </div>
+          <div class="input-group" style="margin-bottom:0">
+            <label>Graph Depth</label>
+            <div class="depth-selector">
+              <button class="depth-btn active" data-depth="1" onclick="setDepth(1,this)">1st</button>
+              <button class="depth-btn" data-depth="2" onclick="setDepth(2,this)">2nd</button>
+              <button class="depth-btn" data-depth="3" onclick="setDepth(3,this)">3rd</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="conceptBtn" onclick="navigateConcept()" style="margin-bottom:0;height:42px">
+            <i data-lucide="compass"></i> Navigate
+          </button>
+        </div>
+
+        <div class="error-banner" id="conceptError" style="margin-top:var(--sp-4)">
+          <i data-lucide="alert-circle"></i>
+          <span id="conceptErrorText"></span>
+        </div>
+      </div>
+
+      <div class="running-indicator" id="conceptRunning" style="margin-top:var(--sp-4)">
+        <div class="spinner"></div>
+        <span>Building knowledge card...</span>
+      </div>
+
+      <div id="conceptOutput"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* ========================================================================
+   STATE
+   ======================================================================== */
+let currentPage = 'intelligence';
+let currentDepth = 1;
+let isRunning = false;
+
+/* ========================================================================
+   NAVIGATION
+   ======================================================================== */
+function switchPage(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+  document.getElementById('mainContent').scrollTop = 0;
+}
+
+/* ========================================================================
+   THEME
+   ======================================================================== */
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  lucide.createIcons();
+}
+
+/* ========================================================================
+   BACKEND CONNECTION
+   ======================================================================== */
+function getBackendUrl() {
+  return document.getElementById('backendUrl').value.replace(/\/+$/, '');
+}
+
+async function checkBackend() {
+  const dot = document.getElementById('backendStatus');
+  try {
+    const res = await fetch(getBackendUrl() + '/health', { signal: AbortSignal.timeout(5000) });
+    if (res.ok) { dot.className = 'topbar-status connected'; }
+    else { dot.className = 'topbar-status error'; }
+  } catch {
+    dot.className = 'topbar-status error';
+  }
+}
+
+/* ========================================================================
+   LENS TOGGLES
+   ======================================================================== */
+function toggleLens(btn) {
+  btn.classList.toggle('active');
+}
+
+function getSelectedLenses() {
+  return Array.from(document.querySelectorAll('.lens-toggle.active')).map(b => b.dataset.lens);
+}
+
+/* ========================================================================
+   DEMO CASE
+   ======================================================================== */
+async function loadDemoCase() {
+  try {
+    const res = await fetch(getBackendUrl() + '/api/demo-case');
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById('companyName').value = data.company_name;
+      document.getElementById('problemStatement').value = data.problem_statement;
+      document.getElementById('contextInput').value = data.context;
+      return;
+    }
+  } catch {}
+  // Fallback — hardcoded demo
+  document.getElementById('companyName').value = 'EuroRetail AG (fictional)';
+  document.getElementById('problemStatement').value = 'Our EBITDA margins have compressed 320bps YoY in our European operations due to logistics cost inflation and SKU proliferation. Revenue growth has decelerated to 2% from 8% last year. Our board is pressing for a credible margin recovery roadmap within two quarters, and our largest institutional investor has requested a capital allocation review at the next earnings call.';
+  document.getElementById('contextInput').value = `EURORETAIL AG — INTERNAL MANAGEMENT PACK (CONFIDENTIAL)
+Fiscal Year 2025 vs 2024
+
+REVENUE
+- Total Revenue: €4.82B (FY25) vs €4.73B (FY24), +1.9% YoY
+- Online Channel: €1.45B (30.1% of rev, +11% YoY)
+- Physical Stores: €3.37B (69.9% of rev, -1.8% YoY)
+- Store Count: 312 stores across 8 EU markets (closed 14 underperformers in FY25)
+- Average Transaction Value: €47.20 (down from €49.10, -3.9%)
+- Active SKU Count: 48,200 (up from 31,500 in FY23 — +53% in 2 years)
+
+PROFITABILITY
+- Gross Margin: 38.2% (FY25) vs 41.0% (FY24), -280bps
+- EBITDA: €598M (FY25) vs €750M (FY24), -20.3%
+- EBITDA Margin: 12.4% (FY25) vs 15.6% (FY24), -320bps
+- Net Income: €187M (FY25) vs €301M (FY24), -37.9%
+- Freight & Logistics Cost as % Rev: 9.8% (FY25) vs 7.1% (FY24), +270bps
+- Last-Mile Delivery Cost per Parcel: €6.40 (up from €4.90, +30.6%)
+
+WORKING CAPITAL
+- Inventory Days: 78 days (FY25) vs 62 days (FY24)
+- Receivables Days: 34 days (stable)
+- Payables Days: 51 days (FY25) vs 55 days (FY24)
+- Net Working Capital: €892M (FY25) vs €710M (FY24), +25.6%
+- Inventory Write-Downs: €43M (FY25) vs €18M (FY24)
+
+SUPPLY CHAIN
+- Distribution Centres: 6 (Germany x2, France, Poland, Spain, Netherlands)
+- On-Time In-Full (OTIF): 84.2% (FY25) vs 91.7% (FY24)
+- Average Lead Time: 8.3 days (up from 5.1 days)
+- Returns Rate (Online): 24.1% (up from 19.3%)
+- SKUs with <€10K Annual Revenue: 18,400 (38.2% of catalogue, 2.1% of revenue)
+
+CAPITAL STRUCTURE
+- Net Debt: €1.12B, Net Debt/EBITDA: 1.87x (FY25) vs 1.24x (FY24)
+- Capex: €310M (FY25), of which €180M is digital transformation
+- Dividend: €0.85/share maintained (€127M total, payout ratio 68%)
+- Share Price: €34.20 (down 28% from 52-week high of €47.50)
+- Analyst Consensus: 4 Hold, 2 Sell, 1 Buy
+
+STRATEGIC CONTEXT
+- Key competitor MegaMart EU is gaining share in 3 of our top 5 markets
+- Consumer confidence index at 92 (below 100 = contractionary)
+- EU logistics costs projected to rise further 5-8% in 2026
+- Board has approved €50M restructuring provision for FY26`;
+}
+
+/* ========================================================================
+   RUN ANALYSIS (SSE)
+   ======================================================================== */
+const STAGE_META = {
+  plan:     { num: 1, title: 'Investigation Plan', icon: 'map' },
+  retrieve: { num: 2, title: 'Evidence Collected', icon: 'search' },
+  cfo:      { num: 3, title: 'CFO Analysis', icon: 'landmark' },
+  coo:      { num: 4, title: 'COO Analysis', icon: 'settings' },
+  strategy: { num: 5, title: 'Strategy Analysis', icon: 'compass' },
+  memo:     { num: 6, title: 'CEO Decision Memo', icon: 'file-text' },
+};
+
+function showError(id, msg) {
+  const banner = document.getElementById(id);
+  banner.querySelector('span').textContent = msg;
+  banner.classList.add('visible');
+}
+function hideError(id) { document.getElementById(id).classList.remove('visible'); }
+
+async function runAnalysis() {
+  if (isRunning) return;
+
+  const company = document.getElementById('companyName').value.trim();
+  const problem = document.getElementById('problemStatement').value.trim();
+  const context = document.getElementById('contextInput').value.trim();
+  const lenses = getSelectedLenses();
+
+  hideError('analyzeError');
+
+  if (!company) { showError('analyzeError', 'Please enter a company name.'); return; }
+  if (!problem) { showError('analyzeError', 'Please enter a problem statement.'); return; }
+  if (lenses.length === 0) { showError('analyzeError', 'Select at least one analyst lens.'); return; }
+
+  isRunning = true;
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('runningIndicator').classList.add('visible');
+
+  // Build stage panels
+  const output = document.getElementById('stagesOutput');
+  output.innerHTML = '';
+
+  const stageOrder = ['plan', 'retrieve'];
+  if (lenses.includes('cfo')) stageOrder.push('cfo');
+  if (lenses.includes('coo')) stageOrder.push('coo');
+  if (lenses.includes('strategy')) stageOrder.push('strategy');
+  stageOrder.push('memo');
+
+  stageOrder.forEach(key => {
+    const meta = STAGE_META[key];
+    const isMemo = key === 'memo';
+    output.innerHTML += `
+      <div class="stage-panel ${isMemo ? 'memo-panel' : ''}" id="panel-${key}">
+        <div class="stage-header" onclick="togglePanel('${key}')">
+          <div class="stage-number pending" id="num-${key}">${meta.num}</div>
+          <span class="stage-title">${meta.title}</span>
+          <span class="stage-status" id="status-${key}">WAITING</span>
+          <i data-lucide="chevron-down" class="stage-chevron" style="width:16px;height:16px"></i>
+        </div>
+        <div class="stage-body" id="body-${key}">
+          <div class="shimmer"></div>
+          <div class="shimmer"></div>
+          <div class="shimmer"></div>
+        </div>
+      </div>`;
+  });
+  lucide.createIcons();
+
+  // Mark first stage as running
+  setStageRunning(stageOrder[0]);
+
+  try {
+    const body = JSON.stringify({
+      company_name: company,
+      problem_statement: problem,
+      context: context,
+      selected_lenses: lenses,
+    });
+
+    const res = await fetch(getBackendUrl() + '/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: body,
+    });
+
+    if (!res.ok) {
+      throw new Error(`Backend returned ${res.status}: ${res.statusText}`);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      // Parse SSE lines
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // Keep incomplete line
+
+      let currentEvent = null;
+      for (const line of lines) {
+        if (line.startsWith('event: ')) {
+          currentEvent = line.slice(7).trim();
+        } else if (line.startsWith('data: ') && currentEvent) {
+          const dataStr = line.slice(6);
+          try {
+            const parsed = JSON.parse(dataStr);
+            if (currentEvent === 'stage' && parsed.stage) {
+              handleStageComplete(parsed.stage, parsed.data, stageOrder);
+            } else if (currentEvent === 'done') {
+              // All done
+            } else if (currentEvent === 'error') {
+              showError('analyzeError', parsed.data?.error || 'Pipeline error');
+            }
+          } catch {}
+          currentEvent = null;
+        } else if (line === '') {
+          currentEvent = null;
+        }
+      }
+    }
+
+  } catch (err) {
+    showError('analyzeError', 'Connection error: ' + err.message + '. Check that your backend is running.');
+  }
+
+  isRunning = false;
+  document.getElementById('runBtn').disabled = false;
+  document.getElementById('runningIndicator').classList.remove('visible');
+}
+
+function setStageRunning(key) {
+  const num = document.getElementById('num-' + key);
+  const status = document.getElementById('status-' + key);
+  if (num) { num.className = 'stage-number running'; }
+  if (status) { status.textContent = 'RUNNING'; status.className = 'stage-status running'; }
+}
+
+function handleStageComplete(stageName, data, stageOrder) {
+  // Update status
+  const num = document.getElementById('num-' + stageName);
+  const status = document.getElementById('status-' + stageName);
+  const body = document.getElementById('body-' + stageName);
+  const panel = document.getElementById('panel-' + stageName);
+
+  if (data._api_error || data.error) {
+    if (num) num.className = 'stage-number error';
+    if (status) { status.textContent = 'ERROR'; status.className = 'stage-status'; }
+    if (body) body.innerHTML = `<div class="prose" style="color:var(--error)">${escHtml(data.error || data.raw_response || 'Unknown error')}</div>`;
+  } else {
+    if (num) num.className = 'stage-number done';
+    if (status) { status.textContent = 'DONE'; status.className = 'stage-status done'; }
+    if (body) body.innerHTML = renderStage(stageName, data);
+  }
+
+  // Expand this panel
+  if (panel) panel.classList.add('expanded');
+
+  // Mark next stage running
+  const idx = stageOrder.indexOf(stageName);
+  if (idx >= 0 && idx < stageOrder.length - 1) {
+    setStageRunning(stageOrder[idx + 1]);
+  }
+
+  lucide.createIcons();
+}
+
+function togglePanel(key) {
+  document.getElementById('panel-' + key)?.classList.toggle('expanded');
+}
+
+/* ========================================================================
+   STAGE RENDERERS
+   ======================================================================== */
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderReasoning(d) {
+  if (!d._reasoning) return '';
+  const id = 'reasoning-' + Math.random().toString(36).slice(2);
+  return `<div class="reasoning-block" id="${id}">
+    <div class="reasoning-toggle" onclick="document.getElementById('${id}').classList.toggle('open')">
+      <i data-lucide="brain-circuit"></i> GLM-5.1 Thinking Process <i data-lucide="chevron-down"></i>
+    </div>
+    <div class="reasoning-body"><div class="reasoning-text">${escHtml(d._reasoning)}</div></div>
+  </div>`;
+}
+
+function renderStage(stage, d) {
+  try {
+    if (d._parse_error || d.raw_response) {
+      return renderReasoning(d) + `<div class="prose">${escHtml(d.raw_response)}</div>`;
+    }
+    let content = '';
+    switch(stage) {
+      case 'plan': content = renderPlan(d); break;
+      case 'retrieve': content = renderRetrieve(d); break;
+      case 'cfo': content = renderAnalyst(d, 'CFO'); break;
+      case 'coo': content = renderAnalyst(d, 'COO'); break;
+      case 'strategy': content = renderStrategy(d); break;
+      case 'memo': content = renderMemo(d); break;
+      default: content = `<pre style="font-family:var(--font-mono);font-size:0.8rem;white-space:pre-wrap;color:var(--text-secondary)">${escHtml(JSON.stringify(d, null, 2))}</pre>`;
+    }
+    return renderReasoning(d) + content;
+  } catch(e) {
+    return renderReasoning(d) + `<pre style="font-family:var(--font-mono);font-size:0.8rem;white-space:pre-wrap;color:var(--text-secondary)">${escHtml(JSON.stringify(d, null, 2))}</pre>`;
+  }
+}
+
+function renderPlan(d) {
+  let h = '';
+  if (d.problem_restatement) {
+    h += `<div class="prose" style="margin-bottom:var(--sp-4)"><strong>Problem:</strong> ${escHtml(d.problem_restatement)}</div>`;
+  }
+  if (d.key_questions?.length) {
+    h += `<div class="section-title">Key Strategic Questions</div>`;
+    h += d.key_questions.map((q,i) => `<div class="rec-item"><span class="rec-badge" style="background:var(--accent-soft);color:var(--accent)">Q${i+1}</span><span>${escHtml(q)}</span></div>`).join('');
+  }
+  if (d.evidence_needed?.length) {
+    h += `<div class="section-title">Evidence Needed</div>`;
+    h += `<div class="prose">${d.evidence_needed.map(e => escHtml(e)).join(' · ')}</div>`;
+  }
+  if (d.tools_to_call?.length) {
+    h += `<div class="section-title">Tools to Invoke</div>`;
+    h += `<div class="lens-grid">${d.tools_to_call.map(t => `<span class="tag-pill" style="font-size:0.8rem;padding:4px 12px">${escHtml(t)}</span>`).join('')}</div>`;
+  }
+  if (d.investigation_rationale) {
+    h += `<div class="section-title">Rationale</div>`;
+    h += `<div class="prose">${escHtml(d.investigation_rationale)}</div>`;
+  }
+  return h;
+}
+
+function renderRetrieve(d) {
+  let h = '';
+  if (d.tools_called?.length) {
+    h += `<div class="section-title">Tools Called</div>`;
+    h += `<div class="lens-grid" style="margin-bottom:var(--sp-4)">${d.tools_called.map(t => `<span class="tag-pill" style="font-size:0.8rem;padding:4px 12px">${escHtml(t)}</span>`).join('')}</div>`;
+  }
+  if (d.computed_ratios && Object.keys(d.computed_ratios).length) {
+    h += `<div class="section-title">Computed Ratios</div><div class="kv-grid">`;
+    for (const [k,v] of Object.entries(d.computed_ratios)) {
+      const label = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      const val = typeof v === 'number' ? v : String(v);
+      const signal = typeof v === 'number' ? (v < 0 ? 'negative' : v > 0 ? 'positive' : 'neutral') : 'neutral';
+      h += `<div class="kv-card"><div class="kv-label">${escHtml(label)}</div><div class="kv-value ${signal}">${escHtml(String(val))}</div></div>`;
+    }
+    h += `</div>`;
+  }
+  if (d.extracted_facts?.length) {
+    h += `<div class="section-title">Extracted Facts</div>`;
+    h += `<ul style="list-style:disc;padding-left:var(--sp-5);color:var(--text-secondary);font-size:0.86rem;line-height:1.7">${d.extracted_facts.map(f => `<li>${escHtml(f)}</li>`).join('')}</ul>`;
+  }
+  if (d.evidence_gaps?.length) {
+    h += `<div class="section-title">Evidence Gaps</div>`;
+    h += `<div class="prose" style="color:var(--warning)">${d.evidence_gaps.map(g => escHtml(g)).join(' · ')}</div>`;
+  }
+  return h;
+}
+
+function renderAnalyst(d, role) {
+  let h = '';
+  if (d.executive_summary) {
+    h += `<div class="prose" style="margin-bottom:var(--sp-4);font-size:0.95rem;color:var(--text-primary);font-weight:450">${escHtml(d.executive_summary)}</div>`;
+  }
+  if (d.key_metrics?.length) {
+    h += `<div class="kv-grid">`;
+    d.key_metrics.forEach(m => {
+      const sig = m.signal === 'negative' ? 'negative' : m.signal === 'positive' ? 'positive' : 'neutral';
+      h += `<div class="kv-card"><div class="kv-label">${escHtml(m.label)}</div><div class="kv-value ${sig}">${escHtml(m.value)}</div><div class="kv-trend">${escHtml(m.trend || '')}</div></div>`;
+    });
+    h += `</div>`;
+  }
+  // Render various analysis sections
+  const sections = [
+    ['margin_analysis', 'Margin Analysis'],
+    ['capital_allocation_view', 'Capital Allocation'],
+    ['investor_implications', 'Investor Implications'],
+    ['supply_chain_assessment', 'Supply Chain Assessment'],
+    ['capacity_and_efficiency', 'Capacity & Efficiency'],
+    ['process_risks', 'Process Risks'],
+    ['analysis', 'Analysis'],
+  ];
+  sections.forEach(([key, title]) => {
+    if (d[key]) {
+      h += `<div class="section-title">${title}</div><div class="prose">${escHtml(d[key])}</div>`;
+    }
+  });
+  if (d.risks?.length) {
+    h += `<div class="section-title">Risks</div>`;
+    h += `<table class="risk-table"><thead><tr><th>Risk</th><th>Materiality</th><th>Horizon</th><th>Impact</th></tr></thead><tbody>`;
+    d.risks.forEach(r => {
+      const mat = (r.materiality||'').toLowerCase();
+      h += `<tr><td>${escHtml(r.name)}</td><td><span class="materiality ${mat}">${escHtml(r.materiality)}</span></td><td>${escHtml(r.horizon||'')}</td><td>${escHtml(r.financial_impact||r.operational_impact||'')}</td></tr>`;
+    });
+    h += `</tbody></table>`;
+  }
+  if (d.recommendations?.length) {
+    h += `<div class="section-title">Recommendations</div><ul class="rec-list">`;
+    d.recommendations.forEach(r => {
+      const prio = (r.priority||'').toLowerCase().replace('-','');
+      const cls = prio.includes('must') ? 'must' : prio.includes('should') ? 'should' : 'explore';
+      h += `<li class="rec-item"><span class="rec-badge ${cls}">${escHtml(r.priority)}</span><div><div style="color:var(--text-primary);font-weight:500">${escHtml(r.action)}</div><div style="font-size:0.78rem;color:var(--text-tertiary);margin-top:2px">${escHtml(r.impact||'')} ${r.timeline ? '· '+escHtml(r.timeline) : ''}</div></div></li>`;
+    });
+    h += `</ul>`;
+  }
+  return h;
+}
+
+function renderStrategy(d) {
+  let h = '';
+  if (d.executive_summary) {
+    h += `<div class="prose" style="margin-bottom:var(--sp-4);font-size:0.95rem;color:var(--text-primary);font-weight:450">${escHtml(d.executive_summary)}</div>`;
+  }
+  if (d.competitive_position) {
+    h += `<div class="section-title">Competitive Position</div><div class="prose">${escHtml(d.competitive_position)}</div>`;
+  }
+  if (d.growth_options?.length) {
+    h += `<div class="section-title">Growth Options</div><div class="kv-grid">`;
+    d.growth_options.forEach(g => {
+      h += `<div class="kv-card"><div style="font-weight:600;font-size:0.88rem;margin-bottom:var(--sp-1)">${escHtml(g.option)}</div><div style="display:flex;gap:var(--sp-2);font-size:0.72rem"><span class="tag-pill">Attract: ${escHtml(g.attractiveness)}</span><span class="tag-pill">Feasib: ${escHtml(g.feasibility)}</span></div></div>`;
+    });
+    h += `</div>`;
+  }
+  if (d.ma_considerations) {
+    h += `<div class="section-title">M&A Considerations</div><div class="prose">${escHtml(d.ma_considerations)}</div>`;
+  }
+  if (d.board_implications) {
+    h += `<div class="section-title">Board Implications</div><div class="prose">${escHtml(d.board_implications)}</div>`;
+  }
+  if (d.strategic_risks?.length) {
+    h += `<div class="section-title">Strategic Risks</div>`;
+    h += `<table class="risk-table"><thead><tr><th>Risk</th><th>Materiality</th><th>Horizon</th><th>Impact</th></tr></thead><tbody>`;
+    d.strategic_risks.forEach(r => {
+      const mat = (r.materiality||'').toLowerCase();
+      h += `<tr><td>${escHtml(r.name)}</td><td><span class="materiality ${mat}">${escHtml(r.materiality)}</span></td><td>${escHtml(r.horizon||'')}</td><td>${escHtml(r.strategic_impact||'')}</td></tr>`;
+    });
+    h += `</tbody></table>`;
+  }
+  if (d.recommendations?.length) {
+    h += `<div class="section-title">Recommendations</div><ul class="rec-list">`;
+    d.recommendations.forEach(r => {
+      const prio = (r.priority||'').toLowerCase().replace('-','');
+      const cls = prio.includes('must') ? 'must' : prio.includes('should') ? 'should' : 'explore';
+      h += `<li class="rec-item"><span class="rec-badge ${cls}">${escHtml(r.priority)}</span><div><div style="color:var(--text-primary);font-weight:500">${escHtml(r.action)}</div><div style="font-size:0.78rem;color:var(--text-tertiary);margin-top:2px">${escHtml(r.impact||'')} ${r.timeline ? '· '+escHtml(r.timeline) : ''}</div></div></li>`;
+    });
+    h += `</ul>`;
+  }
+  return h;
+}
+
+function renderMemo(d) {
+  let h = '';
+
+  // CEO Summary
+  if (d.ceo_summary) {
+    h += `<div class="quote-block" style="border-left-color:var(--accent);background:var(--accent-soft);font-style:normal;font-weight:450">${escHtml(d.ceo_summary)}</div>`;
+  }
+
+  // Top 3 Decisions
+  if (d.top_3_decisions?.length) {
+    h += `<div class="section-title">Top Decisions</div><div class="decision-cards">`;
+    d.top_3_decisions.forEach((dec, i) => {
+      h += `<div class="decision-card" data-num="${i+1}"><h4>${escHtml(dec.title)}</h4><p>${escHtml(dec.rationale)}</p><div class="decision-meta"><span><i data-lucide="user" style="width:12px;height:12px"></i> ${escHtml(dec.owner)}</span><span><i data-lucide="clock" style="width:12px;height:12px"></i> ${escHtml(dec.timeline)}</span>${dec.expected_impact ? `<span><i data-lucide="trending-up" style="width:12px;height:12px"></i> ${escHtml(dec.expected_impact)}</span>` : ''}</div></div>`;
+    });
+    h += `</div>`;
+  }
+
+  // 90-Day Action Plan
+  if (d.ninety_day_action_plan?.length) {
+    h += `<div class="section-title">90-Day Action Plan</div><div class="timeline">`;
+    d.ninety_day_action_plan.forEach(item => {
+      h += `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-week">Week ${escHtml(item.week)}</div><div class="timeline-action">${escHtml(item.action)}</div><div class="timeline-meta">Owner: ${escHtml(item.owner)} ${item.deliverable ? '· Deliverable: '+escHtml(item.deliverable) : ''}</div></div>`;
+    });
+    h += `</div>`;
+  }
+
+  // Cross-Functional Trade-offs
+  if (d.cross_functional_tradeoffs?.length) {
+    h += `<div class="section-title">Cross-Functional Trade-offs</div>`;
+    d.cross_functional_tradeoffs.forEach(t => {
+      h += `<div class="tradeoff-card"><div class="tradeoff-tension">${escHtml(t.tension)}</div><div class="tradeoff-desc">${escHtml(t.description)}</div><div class="tradeoff-resolution">→ ${escHtml(t.recommended_resolution)}</div></div>`;
+    });
+  }
+
+  // Risk Register
+  if (d.risk_register?.length) {
+    h += `<div class="section-title">Consolidated Risk Register</div>`;
+    h += `<table class="risk-table"><thead><tr><th>Risk</th><th>Materiality</th><th>Owner</th><th>Mitigation</th><th>Timeline</th></tr></thead><tbody>`;
+    d.risk_register.forEach(r => {
+      const mat = (r.materiality||'').toLowerCase();
+      h += `<tr><td>${escHtml(r.risk)}</td><td><span class="materiality ${mat}">${escHtml(r.materiality)}</span></td><td>${escHtml(r.owner||'')}</td><td>${escHtml(r.mitigation||'')}</td><td>${escHtml(r.timeline||'')}</td></tr>`;
+    });
+    h += `</tbody></table>`;
+  }
+
+  // Assumptions & Gaps
+  if (d.assumptions_and_gaps?.length) {
+    h += `<div class="section-title">Assumptions & Evidence Gaps</div>`;
+    h += `<ul style="list-style:disc;padding-left:var(--sp-5);color:var(--text-secondary);font-size:0.86rem;line-height:1.7">${d.assumptions_and_gaps.map(a => `<li>${escHtml(a)}</li>`).join('')}</ul>`;
+  }
+
+  // Investor Narrative
+  if (d.investor_narrative) {
+    h += `<div class="section-title">Investor Narrative</div><div class="quote-block">${escHtml(d.investor_narrative)}</div>`;
+  }
+
+  // Board Talking Points
+  if (d.board_talking_points?.length) {
+    h += `<div class="section-title">Board Talking Points</div><ol class="talking-points">`;
+    d.board_talking_points.forEach(p => { h += `<li>${escHtml(p)}</li>`; });
+    h += `</ol>`;
+  }
+
+  return h;
+}
+
+/* ========================================================================
+   CONCEPT NAVIGATOR
+   ======================================================================== */
+function setDepth(d, btn) {
+  currentDepth = d;
+  document.querySelectorAll('.depth-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+async function navigateConcept() {
+  const concept = document.getElementById('conceptInput').value.trim();
+  hideError('conceptError');
+  if (!concept) { showError('conceptError', 'Enter a concept to explore.'); return; }
+
+  document.getElementById('conceptRunning').classList.add('visible');
+  document.getElementById('conceptBtn').disabled = true;
+  document.getElementById('conceptOutput').innerHTML = '';
+
+  try {
+    const res = await fetch(getBackendUrl() + '/api/concept', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ concept_name: concept, depth: currentDepth }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || `Backend returned ${res.status}`);
+    }
+
+    const data = await res.json();
+    document.getElementById('conceptOutput').innerHTML = renderConceptCard(data);
+    lucide.createIcons();
+    document.getElementById('mainContent').scrollTop = 0;
+
+  } catch (err) {
+    showError('conceptError', 'Error: ' + err.message);
+  }
+
+  document.getElementById('conceptRunning').classList.remove('visible');
+  document.getElementById('conceptBtn').disabled = false;
+}
+
+function navigateToNode(name) {
+  document.getElementById('conceptInput').value = name;
+  navigateConcept();
+}
+
+function renderConceptCard(d) {
+  let h = `<div class="concept-card card" style="margin-top:var(--sp-6)">`;
+
+  // Title bar
+  h += `<div class="concept-title-bar"><h3>${escHtml(d.concept_name || d.concept || '')}</h3>`;
+  if (d.domain) h += `<span class="domain-tag">${escHtml(d.domain)}</span>`;
+  if (d.tags?.length) h += d.tags.map(t => `<span class="tag-pill">${escHtml(t)}</span>`).join('');
+  h += `</div>`;
+
+  // Definition
+  if (d.definition) {
+    h += `<div class="concept-section"><div class="concept-section-title">Definition</div><div class="prose" style="font-size:0.95rem">${escHtml(d.definition)}</div></div>`;
+  }
+
+  // Mechanics
+  if (d.mechanics?.length) {
+    h += `<div class="concept-section"><div class="concept-section-title">How It Works</div><ol class="mechanics-list">${d.mechanics.map(m => `<li>${escHtml(m.replace(/^Step \d+:\s*/i,''))}</li>`).join('')}</ol></div>`;
+  }
+
+  // Why It Matters
+  if (d.why_it_matters) {
+    h += `<div class="concept-section"><div class="concept-section-title">Why It Matters</div><div class="prose">${escHtml(d.why_it_matters)}</div></div>`;
+  }
+
+  // Real-World Examples
+  if (d.real_world_examples?.length) {
+    h += `<div class="concept-section"><div class="concept-section-title">Real-World Examples</div><div class="example-cards">`;
+    d.real_world_examples.forEach(ex => {
+      h += `<div class="example-card"><h4>${escHtml(ex.company)}</h4><div class="year">${escHtml(ex.year||'')}</div><p><strong>Context:</strong> ${escHtml(ex.context)}</p><p style="margin-top:4px"><strong>Outcome:</strong> ${escHtml(ex.outcome)}</p></div>`;
+    });
+    h += `</div></div>`;
+  }
+
+  // CEO Playbook
+  if (d.ceo_playbook?.length) {
+    h += `<div class="concept-section"><div class="concept-section-title">CEO Playbook</div><ol class="playbook-list">`;
+    d.ceo_playbook.forEach(p => {
+      h += `<li><strong>${escHtml(p.action)}</strong><span>${escHtml(p.detail)}</span></li>`;
+    });
+    h += `</ol></div>`;
+  }
+
+  // Simulation
+  if (d.simulation) {
+    const simId = 'sim-' + Math.random().toString(36).slice(2);
+    h += `<div class="concept-section"><div class="concept-section-title">Executive Simulation</div><div class="sim-box">`;
+    h += `<div class="sim-scenario">${escHtml(d.simulation.scenario)}</div>`;
+    h += `<div class="sim-question">❓ ${escHtml(d.simulation.question)}</div>`;
+    h += `<button class="btn btn-secondary" onclick="document.getElementById('${simId}').classList.add('revealed');this.style.display='none'"><i data-lucide="eye"></i> Reveal Expert Answer</button>`;
+    h += `<div class="sim-answer" id="${simId}">${escHtml(d.simulation.expert_answer)}</div>`;
+    h += `</div></div>`;
+  }
+
+  // 1st Order Concepts
+  if (d.first_order?.length) {
+    h += `<div class="concept-section"><div class="concept-section-title">Connected Concepts (1st Order)</div><div class="concept-nodes">`;
+    d.first_order.forEach(c => {
+      h += `<div class="concept-node" onclick="navigateToNode('${escHtml(c.name)}')"><h5>${escHtml(c.name)}</h5><div class="relation">${escHtml(c.relation||'')}</div><p>${escHtml(c.brief_description||'')}</p></div>`;
+    });
+    h += `</div></div>`;
+  }
+
+  // 2nd Order
+  if (d.second_order?.length) {
+    h += `<div class="concept-section"><div class="concept-section-title">Connected Concepts (2nd Order)</div><div class="concept-nodes">`;
+    d.second_order.forEach(c => {
+      h += `<div class="concept-node" onclick="navigateToNode('${escHtml(c.name)}')"><div class="parent-label">via ${escHtml(c.parent||'')}</div><h5>${escHtml(c.name)}</h5><p>${escHtml(c.brief_description||'')}</p></div>`;
+    });
+    h += `</div></div>`;
+  }
+
+  // 3rd Order
+  if (d.third_order?.length) {
+    h += `<div class="concept-section"><div class="concept-section-title">Connected Concepts (3rd Order)</div><div class="concept-nodes">`;
+    d.third_order.forEach(c => {
+      h += `<div class="concept-node" onclick="navigateToNode('${escHtml(c.name)}')" style="padding:var(--sp-2) var(--sp-3)"><div class="parent-label">via ${escHtml(c.parent||'')}</div><h5 style="font-size:0.78rem">${escHtml(c.name)}</h5><p style="font-size:0.72rem">${escHtml(c.brief_description||'')}</p></div>`;
+    });
+    h += `</div></div>`;
+  }
+
+  h += `</div>`;
+  return h;
+}
+
+/* ========================================================================
+   INIT
+   ======================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  checkBackend();
+});
+</script>
+</body>
+</html>

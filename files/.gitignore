@@ -1,0 +1,20 @@
+# Environment
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Demo fallback (generated at runtime)
+backend/demo_fallback.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (if frontend grows)
+node_modules/
