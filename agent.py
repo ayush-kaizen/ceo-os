@@ -22,10 +22,11 @@ logger = logging.getLogger("ceo-os")
 
 
 def get_client() -> AsyncOpenAI:
-    """Create an AsyncOpenAI client configured for Z.ai."""
+    """Create an AsyncOpenAI client configured for Z.ai with timeout."""
     return AsyncOpenAI(
         api_key=os.getenv("ZAIAPI_KEY", ""),
         base_url=os.getenv("ZAI_BASE_URL", "https://api.z.ai/api/paas/v4"),
+        timeout=90.0,  # 90 second timeout — prevents infinite hangs
     )
 
 
@@ -116,8 +117,56 @@ async def call_glm(
         return parsed
 
     except Exception as e:
-        logger.error(f"GLM API call failed: {e}")
-        return {"error": str(e), "_api_error": True}
+        logger.warning(f"GLM API call failed ({e}), retrying once...")
+        try:
+            client2 = get_client()
+            response = await client2.chat.completions.create(**kwargs)
+            message = response.choices[0].message
+            raw_text = (message.content or "").strip()
+
+            reasoning = None
+            if hasattr(message, 'reasoning_content') and message.reasoning_content:
+                reasoning = message.reasoning_content
+            try:
+                msg_dict = message.model_dump() if hasattr(message, 'model_dump') else {}
+                if not reasoning and msg_dict.get('reasoning_content'):
+                    reasoning = msg_dict['reasoning_content']
+            except Exception:
+                pass
+
+            if not raw_text and reasoning:
+                raw_text = reasoning
+
+            text_to_parse = raw_text
+            if text_to_parse.startswith("```"):
+                lines = text_to_parse.split("\n")
+                lines = [l for l in lines if not l.strip().startswith("```")]
+                text_to_parse = "\n".join(lines).strip()
+
+            parsed = None
+            try:
+                parsed = json.loads(text_to_parse)
+            except json.JSONDecodeError:
+                start = raw_text.find("{")
+                end = raw_text.rfind("}") + 1
+                if start != -1 and end > start:
+                    try:
+                        parsed = json.loads(raw_text[start:end])
+                    except json.JSONDecodeError:
+                        pass
+
+            if parsed is None:
+                parsed = {"raw_response": raw_text, "_parse_error": True}
+
+            if reasoning and isinstance(parsed, dict):
+                parsed["_reasoning"] = reasoning
+
+            await client2.close()
+            return parsed
+
+        except Exception as e2:
+            logger.error(f"GLM API retry also failed: {e2}")
+            return {"error": f"API call failed after retry: {e2}", "_api_error": True}
     finally:
         await client.close()
 
