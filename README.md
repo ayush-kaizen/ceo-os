@@ -168,6 +168,9 @@ The video shows a complete live run of the six-stage workflow using the built-in
 ### CEO Intelligence — Six-Stage Workflow
 *(Add screenshot of the full analysis output with all 6 stages expanded)*
 
+<img width="2395" height="2012" alt="image" src="https://github.com/user-attachments/assets/d5140927-e30e-4095-87fd-5b5da625f855" />
+
+
 ### CEO Decision Memo — Board-Ready Output
 *(Add screenshot of the CEO Memo panel showing decisions, 90-day plan, trade-offs)*
 
@@ -176,6 +179,9 @@ The video shows a complete live run of the six-stage workflow using the built-in
 
 ### Concept Navigator — Knowledge Graph
 *(Add screenshot of a knowledge card with connected concept graph)*
+
+<img width="2199" height="1874" alt="image" src="https://github.com/user-attachments/assets/17455ee0-25eb-43c8-9d19-50740d8e72bd" />
+
 
 ---
 
