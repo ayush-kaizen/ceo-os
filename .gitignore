@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.DS_Store
+files/
+files-1/
+files-1.zip
+agent 2.py
+
