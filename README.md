@@ -20,7 +20,7 @@ Click **Load Demo Case** → **Run Executive Analysis** on the live frontend to 
 
 ## ✅ Real-World Use Case — Who It's For & What Problem It Solves
 
-**The problem:** When a CEO faces a significant business challenge — margin compression, supply chain disruption, capital allocation pressure — they need cross-functional input from their CFO, COO, and strategy team. This process typically takes **weeks of siloed analysis** and **significant advisory fees**, and the CEO still has to mentally integrate conflicting recommendations from each function into a coherent action plan.
+**The problem:** When a CEO faces a significant business challenge such as margin compression, supply chain disruption, capital allocation pressure. CEOs and management teams need cross-functional input from their CFO, COO, and strategy team. This process typically takes **weeks of siloed analysis** and **significant advisory fees**, and the CEO still has to mentally integrate conflicting recommendations from each function into a coherent action plan.
 
 **Who it's for:**
 - **CEOs and COOs** making high-stakes decisions under time pressure
