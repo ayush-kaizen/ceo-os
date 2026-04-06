@@ -159,7 +159,7 @@ Click **Load Demo Case** to try it instantly with a pre-built scenario — no da
 
 📹 **[Link to 2–3 minute demo video]**
 
-The video shows a complete live run of the six-stage workflow using the built-in EuroRetail AG demo case — from input to board-ready CEO memo.
+The video shows a complete live run of the six-stage workflow using the built-in EuroRetail AG demo case — from input to board-ready CEO memo. - 
 
 ---
 
