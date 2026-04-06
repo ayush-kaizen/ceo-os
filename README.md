@@ -159,7 +159,7 @@ Click **Load Demo Case** to try it instantly with a pre-built scenario — no da
 
 📹 **[Link to 2–3 minute demo video]**
 
-The video shows a complete live run of the six-stage workflow using the built-in EuroRetail AG demo case — from input to board-ready CEO memo. - 
+The video shows a complete live run of the six-stage workflow using the built-in EuroRetail AG demo case — from input to board-ready CEO memo. - https://youtu.be/fg36D14WesY
 
 ---
 
@@ -170,6 +170,9 @@ The video shows a complete live run of the six-stage workflow using the built-in
 
 ### CEO Decision Memo — Board-Ready Output
 *(Add screenshot of the CEO Memo panel showing decisions, 90-day plan, trade-offs)*
+
+<img width="2155" height="1877" alt="image" src="https://github.com/user-attachments/assets/395c382e-3320-497d-85e0-7ef86990bdb7" />
+
 
 ### Concept Navigator — Knowledge Graph
 *(Add screenshot of a knowledge card with connected concept graph)*
